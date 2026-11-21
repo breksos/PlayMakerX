@@ -5,7 +5,7 @@
   <key>CFBundleDisplayName</key><string>Playmaker Tackle</string>
   <key>CFBundleIdentifier</key><string>com.playmaker.team.tackle</string>
   <key>CFBundleVersion</key><string>1</string>
-  <key>CFBundleShortVersionString</key><string>0.4.0</string>
+  <key>CFBundleShortVersionString</key><string>0.4.1</string>
   <key>CFBundleExecutable</key><string>PlaymakerTackle</string>
   <key>CFBundleIconFile</key><string>Playmaker.icns</string>
   <key>CFBundlePackageType</key><string>APPL</string>

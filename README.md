@@ -31,4 +31,6 @@ Developers can also run the source as static files: `python3 -m http.server 8765
 
 To rebuild the Mac app on a Mac with Xcode command line tools and Pillow installed, run `sh native-macos/build-mac.sh`. The result is `dist/Playmaker Tackle.app`.
 
+GitHub Actions checks JavaScript on every push and pull request. A push to `main` deploys the browser app and builds Mac and Windows downloads as workflow artifacts. Pushing a `v*` tag builds both apps and attaches them to a GitHub Release. The Windows installer and Mac ZIP are unsigned, so their operating systems may show the usual unknown-publisher warning. CI builds do not imply live testing on every Windows or Mac version.
+
 This is independent software. It does not use Playmaker X code, artwork, or proprietary play packs.

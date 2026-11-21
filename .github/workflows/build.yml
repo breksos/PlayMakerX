@@ -95,6 +95,6 @@ jobs:
         with:
           name: windows-installer
           path: artifacts
-      - run: gh release create "$GITHUB_REF_NAME" artifacts/* --verify-tag --generate-notes
+      - run: gh release create "$GITHUB_REF_NAME" artifacts/* --repo "$GITHUB_REPOSITORY" --verify-tag --generate-notes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
