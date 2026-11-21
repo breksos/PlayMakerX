@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1822">
+  <title>Playmaker · Tackle Playbook</title>
+  <meta name="description" content="A free, local tackle football playbook editor for coaches.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="features.css">
+  <script src="app.js" defer></script>
+  <script src="features.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">P</span><div><strong>Playmaker</strong><small>TACKLE PLAYBOOK</small></div></div>
+      <span class="local-badge">Saved on this device</span>
+      <div class="top-actions">
+        <button id="importBtn" class="button quiet" type="button">Import backup</button>
+        <button id="exportBtn" class="button quiet" type="button">Export backup</button>
+        <button id="settingsBtn" class="button quiet" type="button">Team setup</button>
+        <select id="printMode" aria-label="Print layout"><option value="playbook">Playbook</option><option value="callsheet">Call sheet</option><option value="wristband">Wristbands</option><option value="wristband-list">Wristband list</option></select>
+        <button id="printBtn" class="button primary" type="button">Print / PDF</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="sidebar" aria-label="Playbook navigation">
+        <div class="side-head"><div><span class="eyebrow">YOUR PLAYBOOK</span><h1>Plays <span id="playCount">0</span></h1></div><button id="newPlayBtn" class="icon-button add" type="button" title="Create play" aria-label="Create play">+</button></div>
+        <div class="book-row"><select id="bookSelect" aria-label="Playbook"></select><button id="addBookBtn" type="button" title="New playbook" aria-label="New playbook">+</button><button id="renameBookBtn" type="button" title="Rename playbook" aria-label="Rename playbook">✎</button><button id="deleteBookBtn" type="button" title="Delete playbook" aria-label="Delete playbook">×</button></div>
+        <label class="search-wrap"><span class="sr-only">Search plays</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg><input id="searchInput" type="search" placeholder="Search plays"></label>
+        <div class="side-tabs" role="tablist" aria-label="Play type">
+          <button data-side="offense" class="active" type="button">Offense</button><button data-side="defense" type="button">Defense</button><button data-side="special" type="button">Special</button>
+        </div>
+        <div id="playList" class="play-list"></div>
+        <div class="roster-panel"><div class="roster-title"><span class="eyebrow">ROSTER</span><button id="editRosterBtn" type="button">Edit</button></div><div id="rosterPanel" class="roster-list"></div></div>
+        <div class="side-foot"><span class="status-dot"></span><span id="saveStatus">Ready</span></div>
+      </aside>
+
+      <section class="editor" aria-label="Play editor">
+        <div class="editor-head">
+          <div><span class="eyebrow">PLAY EDITOR</span><input id="playName" class="play-name" aria-label="Play name" placeholder="Name this play" maxlength="80"></div>
+          <div class="head-actions"><button id="duplicateBtn" class="button quiet" type="button">Duplicate</button><button id="deleteBtn" class="button danger" type="button">Delete</button></div>
+        </div>
+        <div class="meta-row">
+          <label>Formation<input id="formationInput" type="text" placeholder="e.g. Shotgun Trips" maxlength="50"></label>
+          <label>Situation<input id="situationInput" type="text" placeholder="e.g. 3rd & long" maxlength="50"></label>
+          <label>Category<input id="categoryInput" type="text" placeholder="e.g. Pass" maxlength="50"></label>
+          <label>Players <select id="playerCountSelect" aria-label="Players per side"><option>6</option><option>7</option><option>8</option><option>9</option><option selected>11</option><option>12</option></select></label>
+        </div>
+        <div class="quick-row">
+          <label>Formation template <select id="formationTemplate"><option value="">Choose saved formation</option></select></label><button id="applyFormationBtn" class="button quiet" type="button">Apply</button><button id="saveFormationBtn" class="button quiet" type="button">Save formation</button>
+          <label>Personnel group <select id="personnelGroup"><option value="">No group</option></select></label><button id="applyPersonnelBtn" class="button quiet" type="button">Apply</button>
+        </div>
+        <div class="tool-row" role="toolbar" aria-label="Field tools">
+          <div class="tool-group"><button class="tool active" data-tool="select" type="button">Select / move</button><button class="tool" data-tool="route" type="button">Draw route</button><button class="tool" data-tool="option" type="button">Option route</button><button class="tool" data-tool="ball" type="button">Ball path</button><button class="tool" data-tool="text" type="button">Text note</button><button id="finishPathBtn" class="tool finish" type="button" disabled>Finish path</button></div>
+          <details class="advanced-tools"><summary>More drawing options</summary><div class="tool-group"><label class="tool-label">Line <select id="lineStyle"><option value="solid">Solid</option><option value="dashed">Pass / pitch</option><option value="motion">Motion</option><option value="zone">Zone</option><option value="block">Block</option></select></label><label class="tool-label">End <select id="endCap"><option value="arrow">Arrow</option><option value="bar">T</option><option value="dot">Dot</option></select></label><label class="tool-label">Shape <select id="pathShape"><option value="straight">Straight</option><option value="smooth">Smooth</option></select></label><button id="animateBtn" class="tool" type="button">Animate</button><label class="tool-label">Speed <input id="animationSpeed" type="range" min="0.25" max="2" step="0.25" value="1"></label><button id="flipBtn" class="tool" type="button">Flip</button><button id="clearPathBtn" class="tool" type="button">Clear path</button></div></details>
+        </div>
+        <div class="field-card">
+          <div class="field-top"><span>FIELD VIEW</span><span>Drag players · click a player, then field points to draw · press Finish path</span></div>
+          <svg id="field" viewBox="0 0 1000 620" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Interactive football play diagram"></svg>
+          <div class="field-bottom"><span>OFFENSE</span><span>LINE OF SCRIMMAGE</span><span>DEFENSE</span></div>
+        </div>
+        <div class="editor-bottom">
+          <div class="notes-panel"><label for="notesInput" class="eyebrow">COACHING NOTES</label><textarea id="notesInput" placeholder="Add assignments, reads, timing, or coaching points..."></textarea></div>
+          <div class="selected-panel"><span class="eyebrow">SELECTED PLAYER</span><div id="selectionEmpty" class="muted">Select a player on the field to edit its label, name, color, and assignment.</div><div id="selectionFields" hidden><div class="selection-inline"><label>Label<input id="playerLabel" maxlength="8"></label><label>Color<input id="playerColor" type="color"></label></div><div class="selection-inline"><label>Player <select id="rosterSelect"><option value="">Unassigned</option></select></label><label class="check"><input id="receiverCheck" type="checkbox"> Target</label></div><label>Assignment<textarea id="assignmentInput" placeholder="e.g. Protect inside gap"></textarea></label></div></div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <input id="importFile" type="file" accept=".json,application/json" hidden>
+  <input id="logoFile" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+  <dialog id="settingsDialog" class="settings-dialog"><form method="dialog"><div class="dialog-head"><div><span class="eyebrow">TEAM SETUP</span><h2>Customize your playbook</h2></div><button class="button quiet" value="close" type="submit">Close</button></div></form><div class="settings-grid"><section><h3>Team</h3><label>Team name<input id="teamName" maxlength="70" placeholder="Your team"></label><label>Team color<input id="teamColor" type="color" value="#e6a833"></label><button id="uploadLogoBtn" class="button quiet" type="button">Choose team logo</button><button id="removeLogoBtn" class="button quiet" type="button">Remove logo</button><label class="check"><input id="fieldLinesCheck" type="checkbox" checked> Show field lines</label><label>Field theme <select id="fieldTheme"><option value="dark">Dark</option><option value="light">Light</option></select></label><label>Wristband layout <select id="wristbandColumns"><option value="2">2 across</option><option value="3">3 across</option><option value="4">4 across</option></select></label></section><section><h3>Roster</h3><p class="hint">One player per line: number, name. Example: 12, Alex Smith</p><textarea id="rosterText" rows="10" placeholder="12, Alex Smith"></textarea><button id="saveRosterBtn" class="button primary" type="button">Save roster</button></section><section><h3>Personnel groups</h3><p class="hint">Save the current player assignments as a reusable group.</p><input id="personnelName" placeholder="e.g. 11 personnel" maxlength="50"><button id="savePersonnelBtn" class="button primary" type="button">Save current group</button><div id="personnelList" class="settings-list"></div></section></div></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
